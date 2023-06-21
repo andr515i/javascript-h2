@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="scripts.js"></script>
+    <title>Instrument Buttons</title>
+</head>
+
+<body>
+    <!-- Buttons for each instrument -->
+    <button onclick="playInstrument(0, './Harp.mp3')">Play Harp</button>
+    <button onclick="playInstrument(1, './Guitar.mp3')">Play Guitar</button>
+    <button onclick="playInstrument(2, './Flute.mp3')">Play Flute</button>
+    <button onclick="playInstrument(3, './Saxophone.mp3')">Play Saxophone</button>
+
+    <p>in the code, i have changed a few things which i think makes more sense, as well as added a few things. this is
+        something like, calling the playInstrument method on each button, which then calls the original play method
+        after that. with the way i had already set up my js, it just made more sense to continue out of that approach.
+    </p>
+
+
+    <div>
+        <p id="Flute_P">here</p> <button onclick="play('Flute')" type="button">dddd</button>
+    </div>
+
+    <audio id="Flute">
+        <source src="./Musik_intrumenter_audio/Flute.m4a" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+</body>
+
+</html>
