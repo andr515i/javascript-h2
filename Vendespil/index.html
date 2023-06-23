@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        td {
+            width: 100px;
+            height: 100px;
+            border: 1px solid black;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .flipped {
+            background-color: lightblue;
+        }
+
+        .matched {
+            background-color: lightgreen;
+            cursor: default;
+        }
+
+        .hover {
+            background-color: lightgray;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <table id="memoryTable"></table>
+
+    <script>
+        // Array to hold the card images
+        var cardImages = [
+            "./images/1.png",
+            "./images/1.png",
+            "./images/2.png",
+            "./images/2.png",
+            "./images/3.png",
+            "./images/3.png",
+            "./images/4.png",
+            "./images/4.png",
+            "./images/5.png",
+            "./images/5.png",
+            "./images/6.png",
+            "./images/6.png",
+            "./images/7.png",
+            "./images/7.png",
+            "./images/8.png",
+            "./images/8.png",
+            "./images/9.png",
+            "./images/9.png",
+            "./images/10.png",
+            "./images/10.png",
+            "./images/11.png",
+            "./images/11.png",
+            "./images/12.png",
+            "./images/12.png",
+        ];
+
+
+        // Shuffle the card images
+        function shuffle(array) {
+            var currentIndex = array.length, temporaryValue, randomIndex;
+
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex -= 1;
+
+                temporaryValue = array[currentIndex];
+                array[currentIndex] = array[randomIndex];
+                array[randomIndex] = temporaryValue;
+            }
+
+            return array;
+        }
+
+        // Function to create the memory cards
+        function createMemoryCards() {
+            var table = $("#memoryTable");
+            var shuffledImages = shuffle(cardImages);
+
+            var cardIndex = 0;
+            for (var i = 0; i < 4; i++) {
+                var row = $("<tr></tr>");
+                for (var j = 0; j < 6; j++) {
+                    var cell = $("<td></td>");
+                    cell.on("click", flipCard);
+                    cell.on("mouseover", function () {
+                        if (!$(this).hasClass("flipped") && !$(this).hasClass("matched")) {
+                            $(this).addClass("hover");
+                        }
+                    });
+                    cell.on("mouseout", function () {
+                        if (!$(this).hasClass("flipped") && !$(this).hasClass("matched")) {
+                            $(this).removeClass("hover");
+                        }
+                    });
+                    var image = $("<img>").attr("src", "./images/0.png");
+                    cell.append(image);
+                    var frontImage = $("<img>").attr("src", shuffledImages[cardIndex]).hide();
+                    cell.append(frontImage);
+                    row.append(cell);
+                    cardIndex++;
+                }
+                table.append(row);
+            }
+        }
+
+        // Function to flip the card when clicked
+        function flipCard() {
+            var card = $(this);
+
+            if (card.hasClass("flipped") || card.hasClass("matched")) {
+                return;
+            }
+
+            card.removeClass("hover");
+            card.addClass("flipped");
+            card.find("img:last-child").show();
+
+            // Check if two cards are flipped
+            var flippedCards = $(".flipped");
+            if (flippedCards.length === 2) {
+                var card1 = flippedCards.eq(0);
+                var card2 = flippedCards.eq(1);
+
+                // Check if the two flipped cards match
+                if (card1.find("img:last-child").attr("src") === card2.find("img:last-child").attr("src")) {
+                    // Match found
+                    card1.addClass("matched").removeClass("flipped");
+                    card2.addClass("matched").removeClass("flipped");
+                } else {
+                    // No match, flip the cards back
+                    setTimeout(function () {
+                        $(".flipped img:last-child").hide();
+                        card1.removeClass("flipped").addClass("hover").removeClass("matched");
+                        card2.removeClass("flipped").addClass("hover").removeClass("matched");
+                    }, 1000);
+                }
+            }
+        }
+
+        // Create the memory cards when the page loads
+        $(document).ready(function () {
+            createMemoryCards();
+        });
+    </script>
+</body>
+
+</html>
